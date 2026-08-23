@@ -20,6 +20,14 @@ public class User {
   @Column(nullable = false)
   private String password;
 
+  /** Factory app role used by the frontend dashboards and future backend permissions. */
+  @Column(nullable = false)
+  private String role = "WORKER";
+
+  /** Access status. Suspended users must not receive a usable dashboard. */
+  @Column(nullable = false)
+  private String status = "PENDING_APPROVAL";
+
   /**
    * The WebAuthn user handle: a stable, opaque, base64url-encoded identifier for this user that is
    * used by passkeys instead of the username. It is generated lazily the first time the user
@@ -82,6 +90,42 @@ public class User {
    */
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  /**
+   * Gets the user's role.
+   *
+   * @return the user's role
+   */
+  public String getRole() {
+    return role;
+  }
+
+  /**
+   * Sets the user's role.
+   *
+   * @param role the user's role
+   */
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  /**
+   * Gets the user's access status.
+   *
+   * @return the user's status
+   */
+  public String getStatus() {
+    return status;
+  }
+
+  /**
+   * Sets the user's access status.
+   *
+   * @param status the user's status
+   */
+  public void setStatus(String status) {
+    this.status = status;
   }
 
   /**

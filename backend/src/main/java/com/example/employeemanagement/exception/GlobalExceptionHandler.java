@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * Global exception handler for the Employee Management REST API.
+ * Global exception handler for the Factory Work App REST API.
  *
  * <p>Intercepts exceptions thrown by controllers and translates them into standardised JSON error
  * responses with appropriate HTTP status codes.

@@ -1,7 +1,7 @@
 {
-  "name": "employee-management-app",
+  "name": "factory-work-app",
   "version": "1.0.1",
-  "description": "Employee Management App",
+  "description": "Factory work app for shifts, transport, incidents, machine assignments, payslips, notifications, and site operations.",
   "dependencies": {
     "chart.js": "^4.4.4",
     "classnames": "^2.5.1",
@@ -28,7 +28,7 @@
   "scripts": {
     "start": "cd frontend && npm start",
     "server": "cd backend && mvn spring-boot:run",
-    "test": "cd frontend && npm start",
+    "test": "echo \"No automated test suite is configured yet. Run npm run build before deploying.\"",
     "build": "cd frontend && npm run build",
     "frontend": "cd frontend && npm start",
     "backend": "cd backend && mvn spring-boot:run",
@@ -38,21 +38,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hoangsonww/Employee-Management-Fullstack-App.git",
+    "url": "git+https://github.com/xolani-b/Employee-Management-Fullstack-App.git",
     "directory": "Employee-Management-Fullstack-App"
   },
-  "bugs": {
-    "url": "https://github.com/hoangsonww/Employee-Management-Fullstack-App/issues",
-    "email": "hoangson091104@gmail.com"
-  },
   "keywords": [
-    "Employee",
-    "Java",
+    "Factory",
+    "Manufacturing",
     "React",
     "Spring Boot",
-    "Management",
-    "App"
+    "Shift Planning",
+    "HR",
+    "Operations"
   ],
-  "author": "Son Nguyen",
+  "author": "Xolani Maseko",
   "license": "MIT"
 }

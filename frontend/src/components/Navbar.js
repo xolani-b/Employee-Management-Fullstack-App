@@ -63,17 +63,8 @@ const Navbar = () => {
   const drawerContent = (
     <Box sx={{ width: 250, backgroundColor: '#3f51b5', height: '100%', color: 'white' }} role="presentation">
       <List>
-        <ListItem button component={Link} to="/" selected={isActive('/')} onClick={handleDrawerToggle}>
-          <ListItemText primary="Home" sx={{ color: isActive('/') ? '#ff9800' : 'white' }} />
-        </ListItem>
         <ListItem button component={Link} to="/dashboard" selected={isActive('/dashboard')} onClick={handleDrawerToggle}>
-          <ListItemText primary="Dashboard" sx={{ color: isActive('/dashboard') ? '#ff9800' : 'white' }} />
-        </ListItem>
-        <ListItem button component={Link} to="/employees" selected={isActive('/employees')} onClick={handleDrawerToggle}>
-          <ListItemText primary="Employees" sx={{ color: isActive('/employees') ? '#ff9800' : 'white' }} />
-        </ListItem>
-        <ListItem button component={Link} to="/departments" selected={isActive('/departments')} onClick={handleDrawerToggle}>
-          <ListItemText primary="Departments" sx={{ color: isActive('/departments') ? '#ff9800' : 'white' }} />
+          <ListItemText primary="Factory Dashboard" sx={{ color: isActive('/dashboard') ? '#ff9800' : 'white' }} />
         </ListItem>
         <ListItem button component={Link} to="/profile" selected={isActive('/profile')} onClick={handleDrawerToggle}>
           <ListItemText primary="Profile" sx={{ color: isActive('/profile') ? '#ff9800' : 'white' }} />
@@ -130,7 +121,7 @@ const Navbar = () => {
           <Typography
             variant="h6"
             component={Link}
-            to="/"
+            to="/dashboard"
             sx={{
               flexGrow: 1,
               textDecoration: 'none',
@@ -139,7 +130,7 @@ const Navbar = () => {
               fontWeight: 600,
             }}
           >
-            Employee Management System
+            Factory Work App
           </Typography>
 
           {/* Render drawer icon for mobile view */}
@@ -151,18 +142,6 @@ const Navbar = () => {
             // Render full menu for desktop view
             <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
               <Button
-                color={isActive('/') ? 'primary' : 'inherit'}
-                component={Link}
-                to="/"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/') ? '#ff9800' : 'inherit',
-                }}
-              >
-                Home
-              </Button>
-              <Button
                 color={isActive('/dashboard') ? 'primary' : 'inherit'}
                 component={Link}
                 to="/dashboard"
@@ -172,31 +151,7 @@ const Navbar = () => {
                   color: isActive('/dashboard') ? '#ff9800' : 'inherit',
                 }}
               >
-                Dashboard
-              </Button>
-              <Button
-                color={isActive('/employees') ? 'primary' : 'inherit'}
-                component={Link}
-                to="/employees"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/employees') ? '#ff9800' : 'inherit',
-                }}
-              >
-                Employees
-              </Button>
-              <Button
-                color={isActive('/departments') ? 'primary' : 'inherit'}
-                component={Link}
-                to="/departments"
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: isActive('/departments') ? '#ff9800' : 'inherit',
-                }}
-              >
-                Departments
+                Factory Dashboard
               </Button>
               <Button
                 color={isActive('/profile') ? 'primary' : 'inherit'}

@@ -1,106 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Snackbar, Alert, Grid, Card, CardContent, Avatar, Chip, Stack, Divider, Paper, Tooltip } from '@mui/material';
-import { useNavigate, Link } from 'react-router-dom';
-import { getAllEmployees } from '../services/employeeService';
-import { getAllDepartments } from '../services/departmentService';
-import LoadingOverlay from './LoadingOverlay';
+import React from 'react';
+import { Alert, Avatar, Box, Button, Card, CardContent, Chip, Divider, Grid, Paper, Snackbar, Stack, Typography } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import BadgeIcon from '@mui/icons-material/Badge';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LogoutIcon from '@mui/icons-material/Logout';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import SecurityIcon from '@mui/icons-material/Security';
+import SyncIcon from '@mui/icons-material/Sync';
 import useAuth from '../hooks/useAuth';
 import { clearSession } from '../services/authService';
-import { notifyInfo, notifyApiError } from '../utils/toast';
-import ShieldIcon from '@mui/icons-material/Shield';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import LogoutIcon from '@mui/icons-material/Logout';
-import DownloadIcon from '@mui/icons-material/Download';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import EmailIcon from '@mui/icons-material/Email';
+import { notifyInfo } from '../utils/toast';
+
+const roleLabels = {
+  ADMIN: 'Admin / IT',
+  HR: 'HR Officer',
+  SUPERVISOR: 'Supervisor',
+  MANAGER: 'Factory Manager',
+  WORKER: 'Worker',
+};
+
+const statusLabels = {
+  APPROVED: 'Approved',
+  PENDING_APPROVAL: 'Waiting for approval',
+  SUSPENDED: 'Suspended',
+};
+
+const moduleCards = [
+  {
+    title: 'Worker Self-Service',
+    detail: 'Transport requests, payslip access, profile details, incidents, and general factory questions.',
+    icon: <BadgeIcon color="primary" />,
+  },
+  {
+    title: 'Supervisor Controls',
+    detail: 'Attendance, shift checks, PPE walkarounds, machine assignments, and shift incident capture.',
+    icon: <AdminPanelSettingsIcon color="primary" />,
+  },
+  {
+    title: 'HR and Factory Oversight',
+    detail: 'Approvals, suspensions, birthdays, notifications, transport exports, and site-level trends.',
+    icon: <NotificationsActiveIcon color="primary" />,
+  },
+  {
+    title: 'Offline Ready',
+    detail: 'Forms can queue while offline and sync when the device has network again.',
+    icon: <SyncIcon color="primary" />,
+  },
+];
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { authenticated: isLoggedIn, username: authUsername } = useAuth();
-  const [employeeCount, setEmployeeCount] = useState(0);
-  const [departmentCount, setDepartmentCount] = useState(0);
-  const [averageAge, setAverageAge] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [showSnackbar, setShowSnackbar] = useState(false);
+  const { authenticated, username, role, status } = useAuth();
+  const [showSnackbar, setShowSnackbar] = React.useState(false);
 
-  useEffect(() => {
-    if (!isLoggedIn) setShowSnackbar(true);
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const employees = await getAllEmployees();
-        const departments = await getAllDepartments();
-        setEmployeeCount(employees.length);
-        setDepartmentCount(departments.length);
-
-        const totalAge = employees.reduce((sum, emp) => sum + emp.age, 0);
-        const avgAge = employees.length ? (totalAge / employees.length).toFixed(1) : 0;
-        setAverageAge(avgAge);
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-        notifyApiError(error, 'We could not load your profile stats. Please refresh to try again.');
-      }
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
+  React.useEffect(() => {
+    if (!authenticated) setShowSnackbar(true);
+  }, [authenticated]);
 
   const handleCloseSnackbar = () => {
     setShowSnackbar(false);
     navigate('/login', { replace: true });
   };
-
-  const handleLoginRedirect = () => {
-    navigate('/login');
-  };
-
-  if (!isLoggedIn) {
-    return (
-      <>
-        <Snackbar open={showSnackbar} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} sx={{ mt: 9 }}>
-          <Alert onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
-            You must be logged in to view your profile.{' '}
-            <span
-              onClick={handleLoginRedirect}
-              style={{
-                color: '#3f51b5',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-                transition: 'color 0.1s',
-              }}
-              onMouseEnter={e => (e.target.style.color = '#f57c00')}
-              onMouseLeave={e => (e.target.style.color = '#3f51b5')}
-            >
-              Login
-            </span>
-          </Alert>
-        </Snackbar>
-        <div style={{ height: 20 }}></div>
-      </>
-    );
-  }
-
-  if (loading) {
-    return <LoadingOverlay message="Loading your profile…" />;
-  }
-
-  const profileData = {
-    username: authUsername || 'John Doe',
-    employeeCount,
-    departmentCount,
-    averageAge,
-    averageJobSatisfaction: 'High',
-  };
-
-  const avatarUrl = '/OIP.jpg';
-  const email = `${profileData.username}@example.com`;
-  const displayUsername = profileData.username.length > 22 ? `${profileData.username.slice(0, 20)}…` : profileData.username;
-  const displayEmail = email.length > 34 ? `${email.slice(0, 32)}…` : email;
 
   const handleLogout = () => {
     clearSession();
@@ -108,64 +69,48 @@ const Profile = () => {
     navigate('/login');
   };
 
-  const handleExportSnapshot = () => {
-    const rows = [
-      ['Username', profileData.username],
-      ['Email', email],
-      ['Employees', employeeCount],
-      ['Departments', departmentCount],
-      ['Average Age', averageAge],
-      ['Generated At', new Date().toISOString()],
-    ];
-    const csv = ['Field,Value', ...rows.map(r => `"${r[0]}","${r[1]}"`)].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'profile-snapshot.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
+  if (!authenticated) {
+    return (
+      <Snackbar open={showSnackbar} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} sx={{ mt: 9 }}>
+        <Alert onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
+          You must be logged in to view your account.
+        </Alert>
+      </Snackbar>
+    );
+  }
+
+  const displayRole = roleLabels[role] || role || 'Worker';
+  const displayStatus = statusLabels[status] || status || 'Approved';
+  const initials = (username || 'FW')
+    .split(/[.\s_-]+/)
+    .filter(Boolean)
+    .map(part => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        backgroundColor: 'background.default',
-        paddingY: 6,
-        px: { xs: 2, md: 4 },
-      }}
-    >
+    <Box sx={{ minHeight: '100vh', py: 6, px: { xs: 2, md: 4 } }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
-          <Card sx={{ borderRadius: 3, boxShadow: '0 20px 55px rgba(15,23,42,0.12)' }}>
+          <Card sx={{ borderRadius: 2, boxShadow: '0 20px 55px rgba(15,23,42,0.12)' }}>
             <CardContent>
-              <Stack alignItems="center" spacing={2} sx={{ width: '100%' }}>
-                <Avatar src={avatarUrl} alt="User Avatar" sx={{ width: 120, height: 120, border: '4px solid #1E3C72' }} />
-                <Typography
-                  variant="h5"
-                  sx={{
-                    fontWeight: 800,
-                    maxWidth: '100%',
-                    wordBreak: 'break-word',
-                    textAlign: 'center',
-                  }}
-                >
-                  {displayUsername}
+              <Stack alignItems="center" spacing={2}>
+                <Avatar sx={{ width: 116, height: 116, bgcolor: '#1E3C72', border: '4px solid #F5A623', fontSize: 34, fontWeight: 800 }}>
+                  {initials}
+                </Avatar>
+                <Typography variant="h5" sx={{ fontWeight: 800, textAlign: 'center', wordBreak: 'break-word' }}>
+                  {username}
                 </Typography>
-                <Chip icon={<VerifiedUserIcon />} label="Authenticated" color="primary" variant="outlined" />
-                <Tooltip title={email}>
-                  <Chip
-                    icon={<EmailIcon />}
-                    label={displayEmail}
-                    variant="outlined"
-                    sx={{ maxWidth: '100%', '& .MuiChip-label': { overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 240 } }}
-                  />
-                </Tooltip>
+                <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="center">
+                  <Chip icon={<SecurityIcon />} label={displayRole} color="primary" variant="outlined" />
+                  <Chip label={displayStatus} color={status === 'SUSPENDED' ? 'error' : status === 'PENDING_APPROVAL' ? 'warning' : 'success'} variant="outlined" />
+                </Stack>
                 <Divider flexItem sx={{ my: 1 }} />
-                <Button fullWidth variant="contained" startIcon={<LogoutIcon />} color="secondary" onClick={handleLogout}>
+                <Button fullWidth variant="contained" startIcon={<DashboardIcon />} component={Link} to="/dashboard">
+                  Open dashboard
+                </Button>
+                <Button fullWidth variant="outlined" color="secondary" startIcon={<LogoutIcon />} onClick={handleLogout}>
                   Logout
                 </Button>
               </Stack>
@@ -174,62 +119,41 @@ const Profile = () => {
         </Grid>
 
         <Grid item xs={12} md={8}>
-          <Card sx={{ borderRadius: 3, boxShadow: '0 20px 55px rgba(15,23,42,0.12)' }}>
+          <Card sx={{ borderRadius: 2, boxShadow: '0 20px 55px rgba(15,23,42,0.12)' }}>
             <CardContent>
-              <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', sm: 'center' }} spacing={2}>
-                <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                  Your organization pulse
-                </Typography>
-                <Button
-                  variant="outlined"
-                  startIcon={<DownloadIcon />}
-                  sx={{
-                    borderColor: '#1E3C72',
-                    color: '#1E3C72',
-                    '&:hover': { backgroundColor: '#1E3C72', color: '#fff', borderColor: '#1E3C72' },
-                  }}
-                  onClick={handleExportSnapshot}
-                >
-                  Export snapshot
-                </Button>
-              </Stack>
-              <Divider sx={{ my: 2 }} />
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: 1 }}>
+                Account and access
+              </Typography>
+              <Typography color="text.secondary" sx={{ maxWidth: 760 }}>
+                Your login controls which dashboard views you can use. Admin and HR users manage approvals, sites, messages, birthdays, and reports, while supervisors
+                run shift activity and workers use the self-service tools.
+              </Typography>
+              <Divider sx={{ my: 3 }} />
               <Grid container spacing={2}>
-                {[
-                  { label: 'Employees', value: employeeCount, icon: <ShieldIcon color="primary" /> },
-                  { label: 'Departments', value: departmentCount, icon: <AssessmentIcon color="primary" /> },
-                  { label: 'Average age', value: averageAge, icon: <TimelineIcon color="primary" /> },
-                ].map(item => (
-                  <Grid item xs={12} sm={4} key={item.label}>
+                {moduleCards.map(card => (
+                  <Grid item xs={12} sm={6} key={card.title}>
                     <Paper
                       sx={{
-                        padding: 2,
+                        p: 2,
+                        height: '100%',
                         borderRadius: 2,
-                        background: 'linear-gradient(135deg, #e0e7ff 0%, #f5f7ff 100%)',
-                        boxShadow: '0 12px 30px rgba(15,23,42,0.08)',
+                        border: '1px solid rgba(30,60,114,0.12)',
+                        background: 'linear-gradient(135deg, #ffffff 0%, #f7f9ff 100%)',
                       }}
                     >
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        {item.icon}
-                        <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                          {item.value}
+                      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
+                        {card.icon}
+                        <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
+                          {card.title}
                         </Typography>
                       </Stack>
-                      <Typography color="text.secondary">{item.label}</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {card.detail}
+                      </Typography>
                     </Paper>
                   </Grid>
                 ))}
               </Grid>
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
-                  What’s next
-                </Typography>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ flexWrap: 'wrap' }}>
-                  <Chip label="Add a new employee" variant="outlined" component={Link} to="/add-employee" clickable />
-                  <Chip label="Create a department" variant="outlined" component={Link} to="/add-department" clickable />
-                  <Chip label="Visit dashboard" variant="outlined" component={Link} to="/dashboard" clickable />
-                </Stack>
-              </Box>
             </CardContent>
           </Card>
         </Grid>

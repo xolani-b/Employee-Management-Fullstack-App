@@ -6,10 +6,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.example</groupId>
-  <artifactId>employee-management-app</artifactId>
+  <artifactId>factory-work-app</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Employee Management Application</name>
-  <description>Backend for Employee Management Application</description>
+  <name>Factory Work App</name>
+  <description>Backend for the Factory Work App</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -42,12 +42,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-
-    <!-- Spring Boot Starter Data MongoDB -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
 
     <!-- MySQL Connector -->
@@ -143,13 +137,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Faker for fake data generation -->
-    <dependency>
-      <groupId>com.github.javafaker</groupId>
-      <artifactId>javafaker</artifactId>
-      <version>1.0.2</version>
-    </dependency>
-
     <!-- Springdoc OpenAPI UI -->
     <dependency>
       <groupId>org.springdoc</groupId>
@@ -162,12 +149,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
-    </dependency>
-
-    <!-- MongoDB Driver -->
-    <dependency>
-      <groupId>org.mongodb</groupId>
-      <artifactId>mongodb-driver-sync</artifactId>
     </dependency>
 
     <!-- Password Encoder (BCrypt) -->
@@ -250,12 +231,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/hoangsonww/Employee-Management-Fullstack-App</url>
-    </repository>
-  </distributionManagement>
 </project>

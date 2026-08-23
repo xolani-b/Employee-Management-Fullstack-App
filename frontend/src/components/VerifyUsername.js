@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'; // Correct useNavigate
 import { extractFetchError } from '../utils/apiError';
 import { notifySuccess, notifyError } from '../utils/toast';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
+
 const VerifyUsername = () => {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,7 +17,7 @@ const VerifyUsername = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:8080/verify-username/${username}`, {
+      const response = await fetch(`${API_BASE}/verify-username/${username}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });

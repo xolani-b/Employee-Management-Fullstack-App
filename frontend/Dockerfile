@@ -13,6 +13,8 @@ COPY src ./src
 COPY public ./public
 
 # Build the application
+ARG REACT_APP_API_BASE_URL=http://localhost:8080
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 RUN npm run build
 
 # Use an official Nginx image to serve the application
@@ -20,6 +22,9 @@ FROM nginx:alpine
 
 # Copy the build artifacts from the builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
+
+# Let React Router handle direct visits and refreshes on /login, /dashboard, etc.
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose the default port for Nginx
 EXPOSE 80

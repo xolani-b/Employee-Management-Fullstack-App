@@ -6,6 +6,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { extractFetchError } from '../utils/apiError';
 import { notifySuccess, notifyError, notifyWarning } from '../utils/toast';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
+
 const ResetPassword = () => {
   const [username, setUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -36,7 +38,7 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/reset-password', {
+      const response = await fetch(`${API_BASE}/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, newPassword }),

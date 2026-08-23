@@ -1,6 +1,6 @@
 {
-  "short_name": "Employee Management",
-  "name": "Employee Management App",
+  "short_name": "Factory Work",
+  "name": "Factory Work App",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#3f51b5",
+  "theme_color": "#1E3C72",
   "background_color": "#ffffff"
 }

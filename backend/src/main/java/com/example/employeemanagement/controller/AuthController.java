@@ -65,9 +65,11 @@ public class AuthController {
       User user = new User();
       user.setUsername(request.getUsername());
       user.setPassword(passwordEncoder.encode(request.getPassword()));
+      user.setRole("WORKER");
+      user.setStatus("PENDING_APPROVAL");
       user.setUserHandle(UserHandles.generate());
       userRepository.save(user);
-      return ResponseEntity.ok("User registered successfully!");
+      return ResponseEntity.ok("User registered successfully. An admin must approve the account.");
     } catch (DataIntegrityViolationException e) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username already exists");
     } catch (Exception e) {
@@ -97,11 +99,25 @@ public class AuthController {
       authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
+      Optional<User> user = userRepository.findByUsername(request.getUsername());
+      if (user.isPresent() && "SUSPENDED".equalsIgnoreCase(user.get().getStatus())) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: User account is suspended");
+      }
+      if (user.isPresent() && "PENDING_APPROVAL".equalsIgnoreCase(user.get().getStatus())) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+            .body("Error: User account is waiting for admin approval");
+      }
+
       final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
       final String jwt = jwtTokenUtil.generateToken(userDetails.getUsername());
 
       Map<String, String> response = new HashMap<>();
       response.put("token", jwt);
+      user.ifPresent(
+          existing -> {
+            response.put("role", existing.getRole());
+            response.put("status", existing.getStatus());
+          });
       return ResponseEntity.ok(response);
 
     } catch (BadCredentialsException e) {

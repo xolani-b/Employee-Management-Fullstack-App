@@ -20,8 +20,6 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ShieldIcon from '@mui/icons-material/Shield';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate } from 'react-router-dom';
-import { setSession } from '../services/authService';
-import { isWebAuthnSupported } from '../utils/webauthn';
 import { extractFetchError } from '../utils/apiError';
 import { notifySuccess, notifyError, notifyWarning } from '../utils/toast';
 import PasskeyPromptDialog from './PasskeyPromptDialog';
@@ -39,32 +37,9 @@ const Register = () => {
   const [passkeyPromptOpen, setPasskeyPromptOpen] = useState(false);
   const navigate = useNavigate();
 
-  // After registering, sign the user in so they can immediately set up a passkey. Falls back to the
-  // "go to login" dialog if auto sign-in is unavailable.
   const finishSignup = async () => {
-    try {
-      const authRes = await fetch(`${API_BASE}/authenticate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-      if (authRes.ok) {
-        const data = await authRes.json();
-        setSession(data.token, username);
-        setLoading(false);
-        notifySuccess(`Your account is ready, ${username}! You're signed in.`);
-        if (isWebAuthnSupported()) {
-          setPasskeyPromptOpen(true);
-        } else {
-          navigate('/dashboard');
-        }
-        return;
-      }
-    } catch (err) {
-      // Ignore and fall back to the manual login dialog below.
-    }
     setLoading(false);
-    notifySuccess('Account created! Please sign in to continue.');
+    notifySuccess('Account request created. HR or Admin must approve it before login.');
     setSuccessOpen(true);
   };
 
@@ -151,14 +126,14 @@ const Register = () => {
           }}
         >
           <Typography variant="h4" sx={{ fontWeight: 800 }}>
-            Create your account
+            Request access
           </Typography>
-          <Typography>Join the Employee Management platform to streamline onboarding, manage departments, and get insights fast.</Typography>
+          <Typography>Create a factory work app account. HR or Admin can approve the user before full dashboard access.</Typography>
           <Stack spacing={1.2}>
             {[
-              { icon: <RocketLaunchIcon />, text: 'Launch-ready in minutes' },
-              { icon: <ShieldIcon />, text: 'Secure access with protected routes' },
-              { icon: <CheckCircleIcon />, text: 'Export-ready data out of the box' },
+              { icon: <RocketLaunchIcon />, text: 'Worker, HR, supervisor, and manager dashboards' },
+              { icon: <ShieldIcon />, text: 'Approved users only, with suspension support' },
+              { icon: <CheckCircleIcon />, text: 'Transport, incidents, shifts, payslips, and machines' },
             ].map(item => (
               <Stack key={item.text} direction="row" spacing={1} alignItems="center">
                 {item.icon}
@@ -255,7 +230,7 @@ const Register = () => {
       <Dialog open={successOpen} onClose={() => setSuccessOpen(false)} aria-labelledby="register-success-title">
         <DialogTitle id="register-success-title">Welcome aboard!</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">Your account is ready. Head to login to access the dashboard.</Typography>
+          <Typography variant="body1">Your account request is saved. HR or Admin must approve it before you can access the dashboard.</Typography>
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={handleGoToLogin}>

@@ -30,7 +30,7 @@ FROM eclipse-temurin:11-jre-jammy
 WORKDIR /app
 
 # Copy the JAR file from the builder stage
-COPY --from=builder /app/target/employee-management-app-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/factory-work-app-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the application port
 EXPOSE 8080
@@ -51,11 +51,11 @@ ENTRYPOINT ["java", "-XX:TieredStopAtLevel=1", "-XX:+UseSerialGC", "-Dspring.mai
 
 # Commands for building and running the Docker container:
 #
-# cd IdeaProjects/Employee-Management/backend
+# cd Employee-Management-Fullstack-App/backend
 # (Fix the path to your project directory)
 #
-# docker build --platform linux/amd64 -t hoangsonw/employee-management-app .
-# This builds the Docker image ready for Render deployment.
+# docker build -t factory-work-app-backend .
+# This builds the backend image.
 #
 # docker run -p 8080:8080 \
   #  -e MYSQL_HOST=mysql-host \
@@ -63,8 +63,5 @@ ENTRYPOINT ["java", "-XX:TieredStopAtLevel=1", "-XX:+UseSerialGC", "-Dspring.mai
   #  -e MYSQL_DB=your-db \
   #  -e MYSQL_USER=root \
   #  -e MYSQL_PASSWORD=your-password \
-  #  hoangsonw/employee-management-app
+  #  factory-work-app-backend
 # This runs the Docker container locally. Replace the environment variables with your own MySQL database details.
-#
-# docker push hoangsonw/employee-management-app
-# This pushes the Docker image to Docker Hub.

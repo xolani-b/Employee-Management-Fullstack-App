@@ -1,5 +1,7 @@
 const TOKEN_KEY = 'token';
 const USERNAME_KEY = 'EMSusername';
+const ROLE_KEY = 'EMSrole';
+const STATUS_KEY = 'EMSstatus';
 const AUTH_EVENT = 'auth-change';
 
 const authEvents = new EventTarget();
@@ -59,6 +61,8 @@ const scheduleExpiry = token => {
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 
 export const getUsername = () => localStorage.getItem(USERNAME_KEY);
+export const getRole = () => localStorage.getItem(ROLE_KEY);
+export const getStatus = () => localStorage.getItem(STATUS_KEY);
 
 export const isAuthenticated = () => {
   const token = getToken();
@@ -71,10 +75,12 @@ export const isAuthenticated = () => {
   return true;
 };
 
-export const setSession = (token, username) => {
+export const setSession = (token, username, role, status) => {
   if (!token) return;
   localStorage.setItem(TOKEN_KEY, token);
   if (username) localStorage.setItem(USERNAME_KEY, username);
+  if (role) localStorage.setItem(ROLE_KEY, role);
+  if (status) localStorage.setItem(STATUS_KEY, status);
   scheduleExpiry(token);
   emitAuthChange(true);
 };
@@ -83,6 +89,8 @@ export const clearSession = () => {
   const hadToken = !!localStorage.getItem(TOKEN_KEY);
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USERNAME_KEY);
+  localStorage.removeItem(ROLE_KEY);
+  localStorage.removeItem(STATUS_KEY);
   clearExpiryTimer();
   if (hadToken) emitAuthChange(false);
 };

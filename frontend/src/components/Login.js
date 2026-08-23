@@ -26,6 +26,8 @@ import { extractFetchError } from '../utils/apiError';
 import { notifySuccess, notifyError } from '../utils/toast';
 import LoadingOverlay from './LoadingOverlay';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -44,7 +46,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/authenticate', {
+      const response = await fetch(`${API_BASE}/authenticate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -53,7 +55,7 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         setLoading(false);
-        setSession(data.token, username);
+        setSession(data.token, username, data.role, data.status);
         notifySuccess(`Welcome back, ${username}! You're signed in.`);
         setSuccessOpen(true);
       } else {
@@ -71,7 +73,7 @@ const Login = () => {
     setPasskeyLoading(true);
     try {
       const data = await loginWithPasskey(username.trim() || undefined);
-      setSession(data.token, data.username);
+      setSession(data.token, data.username, data.role, data.status);
       setUsername(data.username || username);
       notifySuccess(`Welcome back, ${data.username || username}! Signed in with your passkey.`);
       setSuccessOpen(true);
@@ -133,14 +135,14 @@ const Login = () => {
           }}
         >
           <Typography variant="h4" sx={{ fontWeight: 800 }}>
-            Welcome back
+            Factory Work App
           </Typography>
-          <Typography>Sign in to access your dashboard, manage employees, and keep your organization humming.</Typography>
+          <Typography>Sign in to manage shifts, transport, payslips, incidents, machines, notifications, and factory dashboards.</Typography>
           <Stack spacing={1}>
             <Typography sx={{ fontWeight: 600 }}>Why log in?</Typography>
-            <Typography variant="body2">• Securely access the insights-rich dashboard.</Typography>
-            <Typography variant="body2">• Manage teams, departments, and updates in one spot.</Typography>
-            <Typography variant="body2">• Pick up where you left off with your saved session.</Typography>
+            <Typography variant="body2">Securely access worker, supervisor, HR, payroll, safety, and manager views.</Typography>
+            <Typography variant="body2">Capture incidents, transport requests, attendance, and machine assignments.</Typography>
+            <Typography variant="body2">Use offline capture when data is down and sync when connection returns.</Typography>
           </Stack>
         </Box>
         <CardContent
@@ -153,6 +155,9 @@ const Login = () => {
           <Typography variant="h5" component="h2" textAlign="center" sx={{ marginBottom: '0.5rem', fontWeight: 700 }}>
             Login
           </Typography>
+          <Alert severity="info" sx={{ marginBottom: '1rem' }}>
+            Local admin login: <strong>admin</strong> / <strong>admin123</strong>
+          </Alert>
           {redirectPath && (
             <Alert severity="info" sx={{ marginBottom: '1rem' }}>
               Please log in to continue to <strong>{redirectPath}</strong>.

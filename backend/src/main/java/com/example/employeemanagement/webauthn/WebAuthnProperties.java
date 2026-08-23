@@ -12,7 +12,7 @@ public class WebAuthnProperties {
   private String rpId = "localhost";
 
   /** Human-readable relying party name shown by some authenticators. */
-  private String rpName = "Employee Management System";
+  private String rpName = "Factory Work App";
 
   /** Exact frontend origins (scheme + host + port) allowed to run WebAuthn ceremonies. */
   private Set<String> allowedOrigins = new LinkedHashSet<>();

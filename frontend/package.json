@@ -1,26 +1,20 @@
 {
-  "name": "employee-management-system-frontend",
-  "displayName": "Employee Management System Frontend",
+  "name": "factory-work-app-frontend",
+  "displayName": "Factory Work App Frontend",
   "version": "1.1.0",
-  "author": "Son Nguyen",
+  "author": "Xolani Maseko",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hoangsonww/Employee-Management-Fullstack-App.git"
-  },
-  "bugs": {
-    "url": "https://github.com/hoangsonww/Employee-Management-Fullstack-App/issues"
+    "url": "git+https://github.com/xolani-b/Employee-Management-Fullstack-App.git"
   },
   "homepage": "/",
-  "description": "The frontend of the Employee Management Fullstack App",
+  "description": "Frontend for the Factory Work App.",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.0.1",
     "@mui/material": "^6.0.1",
-    "@react-three/drei": "^9.114.0",
-    "@react-three/fiber": "^8.17.10",
-    "@react-three/postprocessing": "^2.16.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -33,15 +27,14 @@
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.6",
-    "three": "^0.169.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest --config jest.config.js --runInBand",
-    "test:watch": "jest --config jest.config.js --watchAll",
-    "test:coverage": "jest --config jest.config.js --coverage",
+    "test": "echo \"No frontend test suite is configured yet. Run npm run build before deploying.\"",
+    "test:watch": "echo \"No frontend watch test suite is configured yet.\"",
+    "test:coverage": "echo \"No frontend coverage suite is configured yet.\"",
     "eject": "react-scripts eject",
     "format": "prettier --config .prettierrc --no-error-on-unmatched-pattern --write \"postcss.config.js\" \"tailwind.config.js\" \"src/components/*.{html,css,js,jsx,ts,tsx}\" \"src/services/*.{html,css,js,jsx,ts,tsx}\" \"src/tests/*.{html,css,js,jsx,ts,tsx}\" \"src/*.{html,css,js,jsx,ts,tsx}\""
   },
