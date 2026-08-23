@@ -6,7 +6,7 @@
 // the visitor is still reading the landing page — so by the time they log in or load data the
 // instance is already up, and the cold start is hidden instead of felt.
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL || 'https://employee-management-app-gdm5.onrender.com';
+const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
 
 let warmed = false;
 

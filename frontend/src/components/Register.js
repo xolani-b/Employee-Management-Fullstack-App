@@ -26,7 +26,7 @@ import { extractFetchError } from '../utils/apiError';
 import { notifySuccess, notifyError, notifyWarning } from '../utils/toast';
 import PasskeyPromptDialog from './PasskeyPromptDialog';
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL || 'https://employee-management-app-gdm5.onrender.com';
+const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
 
 const Register = () => {
   const [username, setUsername] = useState('');
